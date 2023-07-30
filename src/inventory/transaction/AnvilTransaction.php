@@ -90,7 +90,7 @@ class AnvilTransaction extends InventoryTransaction{
 			$applicableEnchants = self::getApplicableEnchants($this->result, $this->material);
 			$sacrificeConsumed = false;
 
-			if($this->result instanceof Durable && $this->result->getDamage() > 0){
+			if($this->result instanceof Durable && $this->result->getDamage() > 0){/*
 				// result is a clone of input,
 				// therefore if input is instance of Durable, result must also be Durable
 				$damage = $this->result->getDamage();
@@ -101,7 +101,7 @@ class AnvilTransaction extends InventoryTransaction{
 					for($i = 0; $i < $this->material->getCount() && $damage > 0; $i++){
 						$damage -= (int) floor($this->result->getMaxDurability() / 4);
 						$consumedCount += 1;
-						$this->xpCost += 1;
+						//$this->xpCost += 1;
 						$addRepairCost = true;
 					}
 					$this->consumed[] = $this->material->pop($consumedCount);
@@ -116,7 +116,8 @@ class AnvilTransaction extends InventoryTransaction{
 					$addRepairCost = true;
 				}
 
-				$this->result->setDamage(max(0, $damage));
+				//$this->result->setDamage(max(0, $damage));
+			*/
 			}
 
 			if(count($applicableEnchants) > 0){
