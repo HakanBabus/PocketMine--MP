@@ -23,6 +23,8 @@ declare(strict_types=1);
 
 namespace pocketmine\player;
 
+use pocketmine\utils\Config;
+
 interface IPlayer{
 
 	public function getName() : string;
@@ -32,5 +34,7 @@ interface IPlayer{
 	public function getLastPlayed() : ?int;
 
 	public function hasPlayedBefore() : bool;
+
+	public function getData() : Config;
 
 }
