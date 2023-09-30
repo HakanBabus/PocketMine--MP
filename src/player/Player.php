@@ -2741,7 +2741,11 @@ class Player extends Human implements CommandSender, ChunkListener, IPlayer{
 		}
 	}
 
-	public function getData(): \pocketmine\utils\Config{
+	public function getData() : \pocketmine\utils\Config{
 		return \HakanBabus\CoreAPI\PlayerData::getInstance()->get($this);
 	}
+
+	public function getTranslate(string $key, array $replaces = []) : string{
+        return \HakanBabus\EasyLanguage\EasyLanguage::getInstance()->getTranslate2($this->getLocale(), $key, $replaces);
+    }
 }
