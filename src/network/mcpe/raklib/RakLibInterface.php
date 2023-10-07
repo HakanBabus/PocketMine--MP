@@ -230,7 +230,7 @@ class RakLibInterface implements ServerEventListener, AdvancedNetworkInterface{
 				$this->server->getLogger()->emergency("Crash occurred while handling a packet from session (Throwable): $name");
 				$this->server->getLogger()->error($e->getMessage());
 				$this->server->getLogger()->error($e->getTraceAsString());
-				$session->disconnectWithError("Bir hata oluştu, Sunucuya tekrar girmeyi dene!");
+				$session->disconnectWithError("Bir hata oluştu, Bu kısmı ekran görüntüsü alıp discord'da bizlere paylaş, Sunucuya tekrar girebilirsin!");
 				//throw $e;
 			}
 		}
