@@ -41,6 +41,11 @@ use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
 use pocketmine\network\mcpe\protocol\types\inventory\ItemStackWrapper;
 use pocketmine\player\Player;
 use pocketmine\timings\Timings;
+
+use ColinHDev\VanillaHopper\blocks\BlockDataStorer;
+use ColinHDev\VanillaHopper\blocks\Hopper;
+
+
 use function max;
 
 class ItemEntity extends Entity{
@@ -350,4 +355,44 @@ class ItemEntity extends Entity{
 		}
 		$this->flagForDespawn();
 	}
+
+	protected function move(float $dx, float $dy, float $dz) : void {
+        parent::move($dx, $dy, $dz);
+
+        // Only if the world did not change, e.g. due to a teleport, we need to check how far the entity moved.
+        if ($this->location->world === $this->lastLocation->world) {
+            // Check if the entity moved across a block and if not, we already checked that block and the entity just
+            // moved in the borders between that one.
+            if ($this->location->getFloorX() === $this->lastLocation->getFloorX() && $this->location->getFloorY() === $this->lastLocation->getFloorY() && $this->location->getFloorZ() === $this->lastLocation->getFloorZ()) {
+                return;
+            }
+        }
+        $this->checkForHopper();
+    }
+
+	private function checkForHopper() : bool {
+        // Checking the block at the item entity's position.
+        $block = $this->location->getWorld()->getBlock($this->location);
+        if (!$block instanceof Hopper) {
+            // Checking the block below the item entity.
+            $block = $this->location->getWorld()->getBlock($this->location->down());
+            if (!$block instanceof Hopper) {
+                return false;
+            }
+        }
+        $block->scheduleDelayedBlockUpdate(0);
+        BlockDataStorer::getInstance()->assignEntity($block->getPosition(), $this);
+        return true;
+    }
+
+	public function setItem(Item $item) : void {
+        $this->item = clone $item;
+        // Hack: When the item changes, we want all clients to see that, as the item could be a completely different one
+        // because BlockItemPickupEvent's setItem() method provides the ability to completely change the item.
+        // That's why we despawn and then respawn the entity to all of its viewers again.
+        $this->despawnFromAll();
+        $this->spawnToAll();
+    }
 }
+
+
