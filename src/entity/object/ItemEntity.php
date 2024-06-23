@@ -76,6 +76,7 @@ class ItemEntity extends Entity{
 		}
 		$this->item = clone $item;
 		parent::__construct($location, $nbt);
+		$this->checkForHopper();
 	}
 
 	protected function getInitialSizeInfo() : EntitySizeInfo{ return new EntitySizeInfo(0.25, 0.25); }
